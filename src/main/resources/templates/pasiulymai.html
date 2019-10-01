@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Uzsakymai</title>
+    <meta charset="utf-8">
+    		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    		<link rel="stylesheet" href="jqueryui.css">	
+		<link rel="stylesheet" href="main.css">		
+		<style>
+			body {background-color: #ADD8E6;
+			}
+			.anuliuotas, .sanuliuotas {
+				background-color: lightblue;
+			}
+			.ivykdytas, .sivykdytas {
+				background-color: lightgreen;
+			}
+			table {
+				border-collapse: colapse;
+			}
+			th {
+				background-color: lightgreen;			
+			}
+			th, td {
+				padding: 6px;
+				border: 1px solid grey;
+			}
+		</style>
+</head>
+<body>
+    <nav>
+	<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
+    </nav>
+	<div id="uzsakymai">
+	</div>
+</body>
+</html>

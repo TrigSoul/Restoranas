@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kliento užsakymai</title>
+    <meta charset="utf-8">
+    		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    		<link rel="stylesheet" href="jqueryui.css">
+		<link rel="stylesheet" href="main.css">		
+		<style>
+			body {background-color: #ADD8E6;
+			}		
+			.anuliuotas, .sanuliuotas {
+				background-color: lightblue;
+			}
+			.ivykdytas, .sivykdytas {
+				background-color: lightgreen;
+			}
+			table {
+				border-collapse: colapse;
+			}
+			th {
+				background-color: lightgreen;			
+			}
+			th, td {
+				padding: 6px;
+				border: 1px solid grey;
+			}
+			.ch_lab {
+				display: inline-block ! important;
+			}
+		</style>
+	    <script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous">
+	    </script>
+	    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>	    
+	    <script src="crud.js"></script>
+	    <script>
+		$( document ).ready ( function() {
+		
+			var id;
+		
+			// let
+			searchParams = new URLSearchParams(window.location.search);
+		
+			if ( searchParams.has( 'id' )  ) {
+		
+				id = searchParams.get( 'id' )		
+
+				params = {
+				
+					fields: [ 
+						'uzsakymai.pav', 
+						'uzsakymai.sudetis', 
+						'uzsakymai.flagRiesutai', 
+						'flagPieno_produktai' 
+					]
+					, fields_names: [ 'Užsakymas', 'Sudėtis', 'riešutai', 'pieno_produktai' ]
+					, url : 'http://localhost:8080/ajax/klientas?id=' + id
+					, field_data: '.klientai_uzsakymai'
+					, id_html_saraso: 'uzsakymai'
+					, id_html_dialog_formos: 'uzsakymai-dialog'
+					, dialog_size_x: 400
+					, dialog_size_y: 490
+					, title_dialog_form: 'Uzsakymas'
+					, url_save_rec: 'http://localhost:8080/ajax/kliento-uzsakymas?id_kl=' + id
+					, url_delete_rec:  'http://localhost:8080/ajax/salinti-kliento-uzsakyma?id_kl=' + id
+					, fields_edit:  [ 'id_uzsakymai' ]
+					, fields_ed_types: [ 'select' ]
+					, field_name: 'uzsakymai.pav'
+				}
+				
+				crud_kategoriju = new crud ( params );
+				
+				crud_kategoriju.initEmpty();
+				crud_kategoriju.refreshData();
+				
+				
+				$.ajax({
+						url: "http://localhost:8080/ajax/lst-uzsakymai" 
+				}).done(
+				
+					function( uzsakymai_all ) {
+
+						options = '';
+																					// alert ( 'kiek produktu: ' + this.produktai.length );
+						for ( i= 0; i < uzsakymai_all.length; i++ ) {
+																					//alert ( 'i, id, pav:' + i + ',' + this.produktai [ i ].id + ', ' + this.produktai [ i ].pav )
+							options += '<option value="' + uzsakymai_all [ i ].id + '">' + uzsakymai_all [ i ].pav + '</option>';
+						}
+						
+						selectas_html = '<label for="id_uzsakymai">Užsakymas</label>' +
+							'<select type="text" name="id_uzsakymai" id="id_uzsakymai" class="text ui-widget-content ui-corner-all">' +
+								options +
+							'</select>';
+							
+						$( '#uzsakymu_selectas' ).html ( selectas_html );	
+					}
+				);				
+				
+			}
+		});			
+	</script>
+</head>
+<body>
+<nav>
+<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
+</nav>
+<div id="uzsakymo-dialog" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: 259.053px;">
+<p class="validateTips">Visi laukeliai turi buti užpildyti.</p><p class="name_item" id="name_item">Naujas Užsakymas</p>
+<form action=""><fieldset>
+<div id="uzsakymu_selectas">
+</div>
+<!-- Allow form submission with keyboard without duplicating the dialog button -->
+<input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset><input type="hidden" name="id" id="id_rec" value="0">
+</form>
+</div>
+	<div id="uzsakymai">
+	</div>
+</body>
+</html>

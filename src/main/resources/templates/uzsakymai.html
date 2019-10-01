@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Užsakymai</title>
+    <meta charset="utf-8">
+    		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    		<link rel="stylesheet" href="jqueryui.css">	
+		<link rel="stylesheet" href="main.css">		
+		<style>
+			body {background-color: #ADD8E6;
+			}
+			.anuliuotas, .sanuliuotas {
+				background-color: lightblue;
+			}
+			.ivykdytas, .sivykdytas {
+				background-color: lightgreen;
+			}
+			table {
+				border-collapse: colapse;
+			}
+			th {
+				background-color: lightgreen;			
+			}
+			th, td {
+				padding: 6px;
+				border: 1px solid grey;
+			}
+			.ch_lab {
+				display: inline-block ! important;
+			}
+		</style>
+	    <script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous">
+	    </script>
+	    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>	    
+	    <script src="crud.js"></script>
+	    <script>
+		$( document ).ready ( function() {
+
+			params = {
+			
+				fields: [ 'pav', 'sudetis' ]
+				, fields_names: [ 'Užsakymas', 'Sudėtis' ]
+				, url : 'http://localhost:8080/ajax/lst-uzsakymai'
+				, field_data: ''
+				, id_html_saraso: 'uzsakymai'
+				, id_html_dialog_formos: 'uzsakymai-dialog'
+				, dialog_size_x: 400
+				, dialog_size_y: 490
+				, title_dialog_form: 'Užsakymas'
+				, url_save_rec: 'http://localhost:8080/ajax/saugoti-uzsakym'
+				, url_delete_rec:  'http://localhost:8080/ajax/salinti-uzsakyma'
+				, fields_edit:  [ 'pav', 'sudetis' ]
+				, fields_ed_types: [ 'text', 'textarea' ]
+				, field_name: 'pav'
+			}
+			
+			crud_kategoriju = new crud ( params );
+			
+			crud_kategoriju.initEmpty();
+			crud_kategoriju.refreshData();
+			
+		});			
+	</script>
+</head>
+<body>
+    <nav>
+	<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
+    </nav>
+<div id="keliones-dialog" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: 259.053px;">
+<p class="validateTips">Visi laukeliai turi buti užpildyti.</p><p class="name_item" id="name_item">Naujas užsakymas</p>
+<form action=""><fieldset><label for="pav">Užsakymas</label>
+<input type="text" name="pav" id="pav" value="" class="text ui-widget-content ui-corner-all">
+<label for="apras">Sudėtis</label>
+<textarea name="sudetis" id="sudetis" value="" rows="4" cols="40"></textarea><br><br>
+
+<!-- Allow form submission with keyboard without duplicating the dialog button -->
+<input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset><input type="hidden" name="id" id="id_rec" value="0">
+</form>
+</div>
+	<div id="uzsakymai">
+	</div>
+</body>
+</html>
